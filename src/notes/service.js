@@ -3,9 +3,9 @@ const NotesService = {
         return knex.select('*').from('noteful_notes')
     },
 
-    insertNotes(knex, newFolder){
+    insertNotes(knex, newNote){
         return knex
-            .insert(newFolder)
+            .insert(newNote)
             .into('noteful_notes')
             .returning('*')
             .then(rows => {

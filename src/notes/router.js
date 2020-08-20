@@ -1,9 +1,9 @@
 const path = require('path')
 const express = require('express')
 const xss = require('xss')
-const FoldersService = require('./service')
+const NotesService = require('./service')
 
-const foldersRouter = express.Router()
+const NotesRouter = express.Router()
 const jsonParser = express.json()
 
 const serializeUser = note => ({
@@ -13,12 +13,12 @@ const serializeUser = note => ({
     content: xss(note.content)
 })
 
-foldersRouter
+NotesRouter
     .route('/')
     .get((req, res, next) => {
         const knexInstance = req.app.get('db')
         console.log(knexInstance)
-        FoldersService.getAllNotes(knexInstance)
+        NotesService.getAllNotes(knexInstance)
             .then(folder => {
                 res.json(folder.map(serializeUser))
             })
@@ -26,7 +26,8 @@ foldersRouter
     })
     .post(jsonParser, (req, res, next) => {
         const { name } = req.body
-        const newNote = { name,  } 
+        const newNote = { name } 
+        console.log(newNote);
 
         NotesService.insertNotes(req.app.get('db'), newNote)
             .then(notes => {
@@ -40,7 +41,7 @@ foldersRouter
 
 NotesRouter
     .route('/:note_id')
-    .all((req, res, next) => {
+    .get((req, res, next) => {
         NotesService.getById( req.app.get('db'), req.params.id)
             .catch(next)
     })

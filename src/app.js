@@ -20,7 +20,7 @@ const morganOption = ( NODE_ENV === 'production')
 app.use(morgan(morganOption))
 app.use(helmet())
 app.use(cors())
-//app.use('/notes', notesRouter)
+app.use('/notes', notesRouter)
 app.use('/folders', foldersRouter)
 
 
